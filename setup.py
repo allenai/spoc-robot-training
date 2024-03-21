@@ -51,7 +51,6 @@ setup(
     packages=find_packages(
         exclude=["*.tests", "*.tests.*", "tests.*", "tests"],
     ),
-    install_requires=read_requirements("beaker_scripts/requirements.txt"),
-    extras_require={"dev": read_requirements("dev-requirements.txt")},
+    install_requires=read_requirements("docker/requirements.txt"),
     python_requires=">=3.7",
 )
