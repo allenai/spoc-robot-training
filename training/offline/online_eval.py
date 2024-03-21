@@ -32,6 +32,7 @@ def parse_args():
     parser.add_argument("--house_set", default="procthor", help="procthor or objaverse")
     parser.add_argument("--dataset_path", default="/data/datasets")
     parser.add_argument("--output_basedir", default="/data/results/online_evaluation")
+    parser.add_argument("--local_checkpoint_dir", default="/data/results/checkpoint_dir")
     parser.add_argument("--extra_tag", default="")
     parser.add_argument("--benchmark_revision", default="chores-small")
     parser.add_argument("--wandb_logging", default=True, type=str2bool)
@@ -94,7 +95,7 @@ def main(args):
         api = wandb.Api()
         run = api.run(f"{args.wandb_entity_name}/{args.wandb_project_name}/{args.training_run_id}")
     else:
-        run = LoadLocalWandb(run_id=args.training_run_id, save_dir=args.output_basedir)
+        run = LoadLocalWandb(run_id=args.training_run_id, save_dir=args.local_checkpoint_dir)
 
     training_run_name = run.config["exp_name"]
     eval_run_name = get_eval_run_name(args)
@@ -104,9 +105,9 @@ def main(args):
     os.makedirs(ckpt_dir, exist_ok=True)
     os.makedirs(exp_dir, exist_ok=True)
 
-    if args.ckptStep is None:
-        raise ValueError("ckptStep is None")
-    elif args.wandb_logging:
+    if args.wandb_logging:
+        if args.ckptStep is None:
+            raise ValueError("ckptStep is None")
         assert (
             args.wandb_entity_name != "" and args.wandb_project_name != ""
         ), "wandb_entity_name and wandb_project_name must be provided"
@@ -122,7 +123,9 @@ def main(args):
     if args.input_sensors is not None:
         # some sensors (e.g rooms_seen, room_current_seen) that are need to create model
         # are self-predicted and may not be provided to the agent as input
-        assert set(args.input_sensors).issubset(set(model_input_sensors))
+        assert set(args.input_sensors).issubset(
+            set(model_input_sensors)
+        ), f"{set(args.input_sensors)} is not a subset of {set(model_input_sensors)}"
 
     model_version = run.config["model_version"]
 
@@ -144,7 +147,7 @@ def main(args):
     # Ensure the model can be loaded
     agent_class.build_agent(**agent_input, device="cpu")
 
-    assert (
+    assert not args.wandb_logging or (
         args.wandb_entity_name != "" and args.wandb_project_name != ""
     ), "wandb_entity_name and wandb_project_name must be provided"
     if args.wandb_logging:

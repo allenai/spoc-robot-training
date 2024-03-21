@@ -28,9 +28,9 @@ if OBJAVERSE_HOUSES_DIR is None:
 else:
     OBJAVERSE_HOUSES_DIR = os.path.abspath(OBJAVERSE_HOUSES_DIR)
 
-print(
-    f"Using"
-    f" '{OBJAVERSE_ASSETS_DIR}' for objaverse assets,"
-    f" '{OBJAVERSE_ANNOTATIONS_PATH}' for objaverse annotations,"
-    f" '{OBJAVERSE_HOUSES_DIR}' for procthor-objaverse houses."
-)
+# print(
+#     f"Using"
+#     f" '{OBJAVERSE_ASSETS_DIR}' for objaverse assets,"
+#     f" '{OBJAVERSE_ANNOTATIONS_PATH}' for objaverse annotations,"
+#     f" '{OBJAVERSE_HOUSES_DIR}' for procthor-objaverse houses."
+# )

@@ -32,35 +32,20 @@ Or mixed precision:
 Example Full Command:
 
 ```bash
-python -m training.offline.train_pl --max_samples MAX_TRAIN_SAMPLES --eval_max_samples MAX_EVAL_SAMPLES --eval_every EVAL_EPOCH_FREQ --save_every SAVE_EPOCH_FREQ --model_version siglip_base_3 --sliding_window 4 --per_gpu_batch 3 --lr 0.0002 --data_dir DATASET_DIR --dataset_version CHORES --model EarlyFusionCnnTransformer --input_sensors raw_navigation_camera raw_manipulation_camera last_actions an_object_is_in_hand --precision 16-mixed --loss action --max_epochs MAX_EPOCH --resume_local --output_dir OUTPUT_DIR --num_nodes NUM_NODES
+python -m training.offline.train_pl --max_samples MAX_TRAIN_SAMPLES --eval_max_samples MAX_EVAL_SAMPLES --eval_every EVAL_EPOCH_FREQ --save_every SAVE_EPOCH_FREQ --model_version siglip_base_3 --sliding_window 4 --per_gpu_batch 3 --lr 0.0002 --data_dir DATASET_DIR --dataset_version CHORES --model EarlyFusionCnnTransformer --input_sensors raw_navigation_camera raw_manipulation_camera last_actions an_object_is_in_hand --precision 16-mixed --loss action --max_epochs MAX_EPOCH --resume_local --output_dir /path/to/save/logs --num_nodes NUM_NODES
 ```
 
 If you want to train a model on multiple datasets, First define your mixture in `training/offline/dataset_mixtures.py`, for example, `TWO_TASK_MIX = ['ObjectNavType', 'ObjectNavDescription']`. Then pass that name as an argument: `--dataset_version TWO_TASK_MIX`.
 
-# Evaluating a Model (Online Evaluation)
 
-To evaluate a model using online evaluation, use the following command:
-
-
-```bash
-python -m training.offline.online_eval --shuffle --eval_subset minival --output_basedir OUTPUT_DIR --test_augmentation --eval_set_size 200 --task_type TASK_TYPE  --max_eps_len 600 --input_sensors raw_navigation_camera raw_manipulation_camera last_actions an_object_is_in_hand --house_set objaverse --training_run_id TRAINING_ID --wandb_logging False --ckptStep STEP_NUMBER --num_workers NUM_WORKERS --gpu_devices LIST_OF_GPU_IDS
-```
-
+## Logging Metrics and Checkpoints
 To log the metrics and model weights locally use the following tags:
 
 ```bash
---wandb_logging False --output_dir OUTPUT_DIR
+--wandb_logging False --output_dir /path/to/save/logs
 ```
 
-The weights and metrics will be saved in OUTPUT_DIR. An experiment ID will be assigned to your experiment. Use the following to evaluate the trained model. 
-
-```bash
---wandb_logging False --output_basedir OUTPUT_DIR --training_run_id TRAINING_ID --ckptStep STEP_NUMBER 
-```
-
-Note that you need to pass the same directory to both training and evaluation. 
-
-If you would prefer to use wandb then the TRAINING_ID will be your wandb run id and you can use the following tags during training and evaluation:
+If you prefer to use wandb use the following tags:
 
 ```bash
 --wandb_logging True --wandb_entity_name WANDB_ENTITY_NAME --wandb_project_name WANDB_PROJECT_NAME
@@ -71,6 +56,35 @@ Note that if you are using wandb you should also specify a local folder in which
 ```bash
 export WANDB_DIR=/local/path/to/save/files
 ```
+
+Note that during training an experiment ID will be assigned to your experiment. This training id can be used later to evaluate the trained model. 
+
+
+
+# Evaluating a Model (Online Evaluation)
+
+To evaluate a model using online evaluation, use the following command:
+
+
+```bash
+python -m training.offline.online_eval --shuffle --eval_subset minival --output_basedir /path/to/save/logs --test_augmentation --task_type TASK_TYPE --input_sensors raw_navigation_camera raw_manipulation_camera last_actions an_object_is_in_hand --house_set objaverse --training_run_id TRAINING_ID --ckptStep STEP_NUMBER --num_workers NUM_WORKERS --gpu_devices LIST_OF_GPU_IDS
+```
+
+
+The weights and metrics will be saved in `/path/to/save/logs`. Use the following to evaluate the trained model. Note that TRAINING_ID is the identifier that was automatically generated for your training run (Refer to training a model details).
+
+For loading local weights:
+
+```bash
+--wandb_logging False --training_run_id TRAINING_ID --ckptStep STEP_NUMBER --local_checkpoint_dir /path/to/local/checkpoints/
+```
+
+If you would prefer to use wandb then use the following command. The TRAINING_ID will be your wandb run id and you can use the following tags for evaluation:
+
+```bash
+--wandb_logging True --wandb_entity_name WANDB_ENTITY_NAME --wandb_project_name WANDB_PROJECT_NAME --training_run_id TRAINING_ID
+```
+
 
 # Creating Your Own Model
 
@@ -122,3 +136,13 @@ python -m allenact.main training/online/siglip_vitb_gru_rgb_augment_objectnav -c
 
 You can find the checkpoint in the `experiment_output` directory.
 
+
+# Using Our Pretrained Weights
+
+If you would like to reproduce the results of our paper or use our pretrained weights, download the pretrained models from [Here](#TODO) and extract it to `/path/to/local/checkpoints/` folder. Then use the following command to evaluate the model:
+
+```bash
+python -m training.offline.online_eval --shuffle --eval_subset minival --output_basedir /path/to/save/logs --test_augmentation --task_type TASK_TYPE  --input_sensors raw_navigation_camera raw_manipulation_camera last_actions an_object_is_in_hand --house_set objaverse --num_workers NUM_WORKERS --gpu_devices LIST_OF_GPU_IDS --wandb_logging False --training_run_id TRAINING_ID  --local_checkpoint_dir /path/to/local/checkpoints/
+```
+
+`TASK_TYPE` can be a specific task or one of the options of `CHORES` or `CHORESNAV`. `TRAINING_ID` can be one of the [#TODO]. 

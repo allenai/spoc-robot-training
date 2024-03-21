@@ -26,7 +26,7 @@ def load_pl_ckpt(model, ckpt_pth, ckpt_prefix="model.", verbose=False):
     params_in_model_not_in_ckpt = [
         k for k in new_state_dict.keys() if ckpt_prefix + k not in ckpt_state_dict
     ]
-    if len(params_in_model_not_in_ckpt) > 0:
+    if len(params_in_model_not_in_ckpt) > 0 and verbose:
         print("-" * 80)
         print(
             "Parameters that are present in model but not present in checkpoint:",
@@ -39,7 +39,7 @@ def load_pl_ckpt(model, ckpt_pth, ckpt_prefix="model.", verbose=False):
         for k in ckpt_state_dict
         if k[len(ckpt_prefix) :] not in new_state_dict
     ]
-    if len(params_in_ckpt_not_in_model):
+    if len(params_in_ckpt_not_in_model) and verbose:
         print("-" * 80)
         print(
             f"Parameters present in checkpoint not present in model (removing ckpt_prefix='{ckpt_prefix}'):",

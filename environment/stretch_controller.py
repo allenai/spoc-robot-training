@@ -63,7 +63,6 @@ class StretchController:
         if initialize_controller:
             self.controller = Controller(**kwargs)
             self.initialization_args = kwargs
-            print(f"Using Controller commit id: {self.controller._build.commit_id}")
             assert STRETCH_COMMIT_ID in self.controller._build.commit_id
 
             if "scene" in kwargs:

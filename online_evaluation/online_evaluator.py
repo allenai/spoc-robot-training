@@ -635,7 +635,9 @@ class OnlineEvaluatorManager:
             aggrgeated_result_metrics_table.add_data(*this_row)
 
         print("\nAggregated results")
-        print(aggrgeated_result_metrics_table.get_dataframe())
+        print(aggrgeated_result_metrics_table.get_dataframe())  # TODO KIANA
+
+        # from utils.debugger_util import ForkedPdb; ForkedPdb().set_trace()
 
         if upload:
             self.wandb.log({f"FullAggregatedResults": aggrgeated_result_metrics_table})
