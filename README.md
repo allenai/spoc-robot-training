@@ -122,9 +122,21 @@ These will create the directory structure:
 
 Pick a directory `/path/to/objaverse_houses` where you'd like to save ProcTHOR-Objaverse houses. Then run: 
 ```bash
-python scripts/download_objaverse_houses.py --save_dir /path/to/objaverse_houses --subset val
+python -m scripts.download_objaverse_houses --save_dir /path/to/objaverse_houses --subset val
 ```
-to download the validation set of houses as `/path/to/objaverse_houses/val.jsonl.gz`. You can also change `val` to `train` to download the training set of houses. Next you need to set ```export OBJAVERSE_DATA_DIR=/path/to/downloaded/houses```.
+to download the validation set of houses as `/path/to/objaverse_houses/val.jsonl.gz`.
+You can also change `val` to `train` to download the training set of houses.
+
+#### 🛣 Setting environment variables 🛣
+
+Next you need to set the following environment variables:
+```bash
+export OBJAVERSE_HOUSES_DIR=/path/to/objaverse_houses
+export OBJAVERSE_DATA_DIR=/path/to/objaverse_assets
+```
+
+You can see some usage examples for the downloaded data in
+[this jupyter notebook](how_to_use_data.ipynb).
 
 ### 🚀 Running evaluation with a pretrained model 🚀
 
@@ -146,4 +158,3 @@ See the [english-wordnet](https://github.com/globalwordnet/english-wordnet) repo
     eprint    = {2312.02976},
 }
 ```
-
