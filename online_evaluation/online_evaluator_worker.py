@@ -365,17 +365,17 @@ class OnlineEvaluatorWorker:
             object_type = task.task_info["synsets"][0]
 
             if metrics["success"] < 0.1:
-                metrics[
-                    f"extra/{object_type}/when_failed_visited_obj_room"
-                ] = self.has_agent_been_in_obj_room(task)
+                metrics[f"extra/{object_type}/when_failed_visited_obj_room"] = (
+                    self.has_agent_been_in_obj_room(task)
+                )
 
-                metrics[
-                    f"extra/{object_type}/when_failed_max_visible_pixels_navigation"
-                ] = self.get_num_pixels_visible("nav", task)
+                metrics[f"extra/{object_type}/when_failed_max_visible_pixels_navigation"] = (
+                    self.get_num_pixels_visible("nav", task)
+                )
 
-                metrics[
-                    f"extra/{object_type}/when_failed_max_visible_pixels_manipulation"
-                ] = self.get_num_pixels_visible("manip", task)
+                metrics[f"extra/{object_type}/when_failed_max_visible_pixels_manipulation"] = (
+                    self.get_num_pixels_visible("manip", task)
+                )
 
             metrics[f"extra/{object_type}/success"] = metrics[
                 "success"
