@@ -63,9 +63,6 @@ def arg_parser_for_offline_training():
         nargs="+",
         default=["raw_navigation_camera", "raw_manipulation_camera"],
     )
-    if args.wandb_logging:
-        assert args.wandb_project_name != ""
-        assert args.wandb_entity_name != ""
     return parser
 
 
@@ -472,6 +469,9 @@ def launch_training(args):
 
 if __name__ == "__main__":
     args = arg_parser_for_offline_training().parse_args()
+    if args.wandb_logging:
+        assert args.wandb_project_name != ""
+        assert args.wandb_entity_name != ""
     os.environ["TOKENIZERS_PARALLELISM"] = "False"
     torch.hub._validate_not_a_forked_repo = (
         lambda a, b, c: True
