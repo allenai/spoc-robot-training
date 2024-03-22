@@ -631,7 +631,6 @@ class OnlineEvaluatorManager:
                 else:
                     this_row.append(-1)
                     print("missing metric", col, "for task", task_type)
-
             aggrgeated_result_metrics_table.add_data(*this_row)
 
         print("\nAggregated results")
