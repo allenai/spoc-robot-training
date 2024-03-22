@@ -10,6 +10,7 @@ import wandb
 from lightning.pytorch.loggers.logger import Logger
 from lightning.pytorch.utilities.rank_zero import rank_zero_only
 import yaml
+from prettytable import PrettyTable
 
 
 class LoggerInfo:
@@ -123,7 +124,7 @@ class LocalWandb:
 
         self.full_dir = os.path.join(self.save_dir, self.run_id)
         os.makedirs(self.full_dir, exist_ok=True)
-        print("Logging everythin in ", self.full_dir)
+        print("Logging everything in ", os.path.abspath(self.full_dir))
 
     def log_config(self, config):
 
@@ -161,9 +162,6 @@ class LocalWandb:
         pass
 
     def log_artifact(self, artifact: wandb.Artifact, aliases):
-        # name = artifact.name
-        # type = artifact.type
-        # file = artifact.file
         for file, info in artifact._added_local_paths.items():
             command = f"cp {file} {self.full_dir}"
             self.write_logs(f"executing {command}")
@@ -192,8 +190,6 @@ class LocalWandb:
 
 
 class LocalTable:
-    columns = []
-    rows = []
 
     @staticmethod
     def get_local_table_from_wandb_table(wandb_table):
@@ -204,15 +200,16 @@ class LocalTable:
 
     def __init__(self, columns):
         self.columns = columns
+        self.rows = []
 
     def add_data(self, *data):
         self.rows.append(data)
 
     def __str__(self) -> str:
-        tab_str = ", ".join(self.columns) + "\n"
+        t = PrettyTable(self.columns)
         for row in self.rows:
-            tab_str += ", ".join([str(r) for r in row]) + "\n"
-        return tab_str
+            t.add_row(row)
+        return str(t)
 
     def get_dataframe(self):
         return str(self)

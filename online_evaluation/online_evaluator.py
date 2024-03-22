@@ -631,21 +631,10 @@ class OnlineEvaluatorManager:
                 else:
                     this_row.append(-1)
                     print("missing metric", col, "for task", task_type)
-
             aggrgeated_result_metrics_table.add_data(*this_row)
 
-            # TODO remove
-            import pprint
-
-            pp = pprint.PrettyPrinter(indent=4)
-            print("Task", task_type)
-            print(columns)
-            print(all_tasks_aggregated_results[task_type][1])
-
-        # print("\nAggregated results")
-        # print(aggrgeated_result_metrics_table.get_dataframe())  # TODO KIANA
-
-        # from utils.debugger_util import ForkedPdb; ForkedPdb().set_trace()
+        print("\nAggregated results")
+        print(aggrgeated_result_metrics_table.get_dataframe())
 
         if upload:
             self.wandb.log({f"FullAggregatedResults": aggrgeated_result_metrics_table})
