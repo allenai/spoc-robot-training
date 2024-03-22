@@ -137,12 +137,45 @@ python -m allenact.main training/online/siglip_vitb_gru_rgb_augment_objectnav -c
 You can find the checkpoint in the `experiment_output` directory.
 
 
-# Using Our Pretrained Weights
+# Downloading our pretrained models
 
-If you would like to reproduce the results of our paper or use our pretrained weights, download the pretrained models from [Here](#TODO) and extract it to `/path/to/local/checkpoints/` folder. Then use the following command to evaluate the model:
+Pick a directory `/path/to/pretrained_models` where you'd like to save our pretrained models. Then run 
+```bash
+python -m scripts.download_trained_ckpt --save_dir /path/to/local/checkpoints --ckpt_ids SigLIP-ViTb-3-CHORES-S
+```
+to download our `SigLIP-ViTb-3-CHORES-S` model. Skipping `--ckpt_ids` will download `DINOv2-ViTs-3-CHORES-S`,
+`SigLIP-ViTb-3-CHORES-L`, `SigLIP-ViTb-3-CHORES-S`, `SigLIP-ViTb-3-CHORESNav-L`, `SigLIP-ViTb-3-CHORESNav-S`,
+`SigLIP-ViTb-3-double-det-CHORES-L`, and `SigLIP-ViTb-3-double-det-CHORES-S` under the directory.
+
+Then, we can evaluate the model without detection:
 
 ```bash
-python -m training.offline.online_eval --shuffle --eval_subset minival --output_basedir /path/to/save/logs --test_augmentation --task_type TASK_TYPE  --input_sensors raw_navigation_camera raw_manipulation_camera last_actions an_object_is_in_hand --house_set objaverse --num_workers NUM_WORKERS --gpu_devices LIST_OF_GPU_IDS --wandb_logging False --training_run_id TRAINING_ID  --local_checkpoint_dir /path/to/local/checkpoints/
+python -m training.offline.online_eval --shuffle --eval_subset minival --output_basedir /path/to/save/logs \
+ --test_augmentation --task_type TASK_TYPE \
+ --input_sensors raw_navigation_camera raw_manipulation_camera last_actions an_object_is_in_hand \
+ --house_set objaverse --wandb_logging False --num_workers NUM_WORKERS \
+ --gpu_devices LIST_OF_GPU_IDS --training_run_id TRAINING_ID --local_checkpoint_dir /path/to/local/checkpoints
 ```
 
-`TASK_TYPE` can be a specific task or one of the options of `CHORES` or `CHORESNAV`. `TRAINING_ID` can be one of the [#TODO]. 
+and the model with detection:
+
+```bash
+python -m training.offline.online_eval --shuffle --eval_subset minival --output_basedir /path/to/save/logs \
+ --test_augmentation --task_type TASK_TYPE \
+ --input_sensors raw_navigation_camera raw_manipulation_camera last_actions an_object_is_in_hand \
+ nav_task_relevant_object_bbox manip_task_relevant_object_bbox nav_accurate_object_bbox manip_accurate_object_bbox \
+ --house_set objaverse --wandb_logging False --num_workers NUM_WORKERS \
+ --gpu_devices LIST_OF_GPU_IDS --training_run_id TRAINING_ID --local_checkpoint_dir /path/to/local/checkpoints
+```
+
+`TASK_TYPE` can be a specific task or one of the options of `CHORES` or `CHORESNAV`. `TRAINING_ID` can be one of the `DINOv2-ViTs-3-CHORES-S`,
+`SigLIP-ViTb-3-CHORES-L`, `SigLIP-ViTb-3-CHORES-S`, `SigLIP-ViTb-3-CHORESNav-L`, `SigLIP-ViTb-3-CHORESNav-S`,
+`SigLIP-ViTb-3-double-det-CHORES-L`, and `SigLIP-ViTb-3-double-det-CHORES-S`.
+
+for a more concrete example, please refer to the `scripts/evaluate_pretrained_model.sh` script:
+
+ ```bash
+bash scripts/evaluate_pretrained_model.sh
+ ```
+
+it would download objaverse assets, objaverse houses, and the pretrained model `SigLIP-ViTb-3-double-det-CHORES-S`, and then evaluate the model on the minival set.
