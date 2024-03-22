@@ -1,5 +1,6 @@
 import argparse
 import datetime
+import glob
 import os
 
 import torch
@@ -105,7 +106,20 @@ def main(args):
     os.makedirs(exp_dir, exist_ok=True)
 
     if args.ckptStep is None:
-        raise ValueError("ckptStep is None")
+        query = os.path.join(ckpt_dir, "*.ckpt")
+        print(query)
+        found = glob.glob(query)
+
+        if len(found) == 0:
+            query = os.path.join(args.output_basedir, args.training_run_id, "*.ckpt")
+            print(query)
+            found = glob.glob(query)
+
+        if len(found) == 0:
+            raise ValueError("No checkpoints found.")
+
+        ckpt_pth = sorted(found)[-1]
+        print(f"No checkpoint step given. Using {ckpt_pth}.")
     elif args.wandb_logging:
         assert (
             args.wandb_entity_name != "" and args.wandb_project_name != ""
@@ -144,10 +158,10 @@ def main(args):
     # Ensure the model can be loaded
     agent_class.build_agent(**agent_input, device="cpu")
 
-    assert (
-        args.wandb_entity_name != "" and args.wandb_project_name != ""
-    ), "wandb_entity_name and wandb_project_name must be provided"
     if args.wandb_logging:
+        assert (
+                args.wandb_entity_name != "" and args.wandb_project_name != ""
+        ), "wandb_entity_name and wandb_project_name must be provided"
         preset_wandb = make_wandb(
             wandb_project=args.wandb_project_name,
             wandb_entity=args.wandb_entity_name,

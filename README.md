@@ -140,7 +140,30 @@ You can see some usage examples for the downloaded data in
 
 ### 🚀 Running evaluation with a pretrained model 🚀
 
-For evaluation commands refer to the [TRAINING_README.md](TRAINING_README.md) file.
+#### 🚂 Training and evaluating your own model 🚂
+
+For training and evaluation commands refer to the [TRAINING_README.md](TRAINING_README.md) file.
+
+#### ⚙️ Downloading our pretrained models ⚙️
+
+Pick a directory `/path/to/pretrained_models` where you'd like to save our pretrained models. Then run 
+```bash
+python -m scripts.download_trained_ckpt --save_dir /path/to/pretrained_models --ckpt_ids SigLIP-ViTb-3-CHORES-S
+```
+to download our `SigLIP-ViTb-3-CHORES-S` model. Skipping `--ckpt_ids` will download `DINOv2-ViTs-3-CHORES-S`,
+`SigLIP-ViTb-3-CHORES-L`, `SigLIP-ViTb-3-CHORES-S`, `SigLIP-ViTb-3-CHORESNav-L`, `SigLIP-ViTb-3-CHORESNav-S`,
+`SigLIP-ViTb-3-double-det-CHORES-L`, and `SigLIP-ViTb-3-double-det-CHORES-S` under the directory.
+
+Then, we can evaluate with:
+```bash
+python -m training.offline.online_eval --shuffle --eval_subset minival --output_basedir ~/data/train_output \
+ --test_augmentation --eval_set_size 200 --task_type ObjectNavType  --max_eps_len 600 \
+ --input_sensors raw_navigation_camera raw_manipulation_camera last_actions an_object_is_in_hand \
+ --house_set objaverse --training_run_id SigLIP-ViTb-3-CHORES-S --wandb_logging False --num_workers 1
+```
+For more details about the available options, please refer to the [TRAINING_README.md](TRAINING_README.md) file. Note that,
+in this example command, we skip providing a checkpoint id (`--ckptStep`), which will result in the eval script picking the
+last checkpoint (alphanumerical sorting) in the downloaded model directory.
 
 ## 📚 Attribution 📚
 

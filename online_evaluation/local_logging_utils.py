@@ -7,6 +7,7 @@ from typing import Dict
 
 import lightning.pytorch as pl
 import wandb
+import yaml
 from lightning.pytorch.loggers.logger import Logger
 from lightning.pytorch.utilities.rank_zero import rank_zero_only
 
@@ -76,8 +77,28 @@ class LoadLocalWandb:
         return path
 
     def load_config(self):
-        with open(os.path.join(self.save_dir, self.run_id, "config.json"), "r") as f:
-            config = json.load(f)
+        json_path = os.path.join(self.save_dir, self.run_id, "config.json")
+        yaml_path = os.path.join(self.save_dir, self.run_id, "config.yaml")
+        if os.path.isfile(json_path):
+            with open(json_path, "r") as f:
+                config = json.load(f)
+        elif os.path.isfile(yaml_path):
+            with open(yaml_path, "r") as f:
+                config = yaml.load(f, yaml.BaseLoader)
+
+            def extract_values(data):
+                values = {}
+                for key, value in data.items():
+                    if isinstance(value, dict):
+                        if set(value.keys()) == {"desc", "value"}:
+                            values[key] = value['value']
+                        else:
+                            values[key] = extract_values(value)
+                return values
+
+            config = extract_values(config)
+        else:
+            raise ValueError(f"No config (yaml or json) found under {os.path.join(self.save_dir, self.run_id)}")
         return config
 
 
