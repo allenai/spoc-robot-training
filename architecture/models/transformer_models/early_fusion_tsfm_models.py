@@ -368,15 +368,15 @@ class EarlyFusionCnnTransformerAgent(AbstractAgent):
             "manip_accurate_object_bbox",
         ]:
             if sensor_name in self.model.input_sensors:
-                preprocessed_nonvisual_sensors[sensor_name] = (
-                    self.preprocessor.process_task_relevant_bbox([observations], sensor_name)
-                )
+                preprocessed_nonvisual_sensors[
+                    sensor_name
+                ] = self.preprocessor.process_task_relevant_bbox([observations], sensor_name)
 
         if "an_object_is_in_hand" in self.model.input_sensors:
             observations["an_object_is_in_hand"] = observations["an_object_is_in_hand"][:, 0]
-            preprocessed_nonvisual_sensors["an_object_is_in_hand"] = (
-                self.preprocessor.process_objinhand([observations])
-            )
+            preprocessed_nonvisual_sensors[
+                "an_object_is_in_hand"
+            ] = self.preprocessor.process_objinhand([observations])
 
         return dict(
             visual_sensors=frames_dict,

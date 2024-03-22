@@ -161,9 +161,9 @@ class AbstractSPOCTaskSampler(TaskSampler):
 
             try:
                 if self.current_house_index in self.fixed_starting_positions:
-                    self.current_house["metadata"]["agent"]["position"] = (
-                        self.fixed_starting_positions[self.current_house_index]
-                    )
+                    self.current_house["metadata"]["agent"][
+                        "position"
+                    ] = self.fixed_starting_positions[self.current_house_index]
 
                 self.reset_scene_with_timeout_handler()
             except ValueError as e:
@@ -209,9 +209,9 @@ class AbstractSPOCTaskSampler(TaskSampler):
 
                     if teleport_success:
                         assert self.controller.get_current_agent_full_pose()["position"]["y"] > 0
-                        self.fixed_starting_positions[self.current_house_index] = (
-                            self.controller.get_current_agent_full_pose()["position"]
-                        )
+                        self.fixed_starting_positions[
+                            self.current_house_index
+                        ] = self.controller.get_current_agent_full_pose()["position"]
                     else:
                         raise HouseInvalidForTaskException(
                             "Could not find a valid teleportation point in the house."
@@ -226,9 +226,9 @@ class AbstractSPOCTaskSampler(TaskSampler):
 
         # NOTE: Set reachable positions
         if self.current_house_index not in self.reachable_positions_map:
-            self.reachable_positions_map[self.current_house_index] = (
-                self.controller.get_reachable_positions()
-            )
+            self.reachable_positions_map[
+                self.current_house_index
+            ] = self.controller.get_reachable_positions()
 
         self.randomize_materials()  # Must be done after resetting!
 

@@ -160,7 +160,7 @@ def main(args):
 
     if args.wandb_logging:
         assert (
-                args.wandb_entity_name != "" and args.wandb_project_name != ""
+            args.wandb_entity_name != "" and args.wandb_project_name != ""
         ), "wandb_entity_name and wandb_project_name must be provided"
         preset_wandb = make_wandb(
             wandb_project=args.wandb_project_name,

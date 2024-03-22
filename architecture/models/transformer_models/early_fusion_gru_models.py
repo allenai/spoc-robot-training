@@ -329,9 +329,9 @@ class EarlyFusionCnnRNNAgent(AbstractAgent):
 
         if "an_object_is_in_hand" in self.model.input_sensors:
             observations["an_object_is_in_hand"] = observations["an_object_is_in_hand"][:, 0]
-            preprocessed_nonvisual_sensors["an_object_is_in_hand"] = (
-                self.preprocessor.process_objinhand([observations])
-            )
+            preprocessed_nonvisual_sensors[
+                "an_object_is_in_hand"
+            ] = self.preprocessor.process_objinhand([observations])
 
         return dict(
             visual_sensors=frames_dict,

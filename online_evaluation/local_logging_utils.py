@@ -91,14 +91,16 @@ class LoadLocalWandb:
                 for key, value in data.items():
                     if isinstance(value, dict):
                         if set(value.keys()) == {"desc", "value"}:
-                            values[key] = value['value']
+                            values[key] = value["value"]
                         else:
                             values[key] = extract_values(value)
                 return values
 
             config = extract_values(config)
         else:
-            raise ValueError(f"No config (yaml or json) found under {os.path.join(self.save_dir, self.run_id)}")
+            raise ValueError(
+                f"No config (yaml or json) found under {os.path.join(self.save_dir, self.run_id)}"
+            )
         return config
 
 
