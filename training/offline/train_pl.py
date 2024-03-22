@@ -273,7 +273,10 @@ class LitModel(pl.LightningModule):
 
     def on_save_checkpoint(self, checkpoint):
         checkpoint["train_steps"] = self.train_steps
-        self.logger._checkpoint_name = f"ckpt-{self.logger._run_id}-{self.train_steps}"
+        if hasattr(self.logger, "_run_id"):
+            self.logger._checkpoint_name = f"ckpt-{self.logger._run_id}-{self.train_steps}"
+        else:
+            self.logger._checkpoint_name = f"ckpt-{self.logger.experiment.id}-{self.train_steps}"
 
     def on_load_checkpoint(self, checkpoint):
         self.train_steps = checkpoint["train_steps"]
