@@ -1,4 +1,4 @@
-# SPOC 🖖: Imitating Shortest Paths in Simulation Enables Effective Navigation and Manipulation in the Real World
+# [SPOC 🖖: Imitating Shortest Paths in Simulation Enables Effective Navigation and Manipulation in the Real World](https://spoc-robot.github.io/)
 
 [![License](https://img.shields.io/badge/License-Apache_2.0-yellow.svg)](https://opensource.org/licenses/Apache-2.0)
 [![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/release/python-390/)
