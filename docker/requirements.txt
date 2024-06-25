@@ -22,7 +22,7 @@ stringcase
 nltk @ git+https://github.com/nltk/nltk@582e6e35f0e6c984b44ec49dcb8846d9c011d0a8
 phonemizer
 networkx
-numpy-quaternion==2022.4.1
+numpy-quaternion==2023.0.4
 tensorboardx>=2.1
 setproctitle
 moviepy>=1.0.3
