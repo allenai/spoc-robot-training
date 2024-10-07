@@ -76,6 +76,30 @@ The `raw_*_camera_*.mp4` files contain videos of the agent's trajectories in the
 | `templated_task_spec`              | A dictionary of the task information, which can be used to generate the natural language description of the task.                   |
 | `visible_target_4m_count`          | The count of targets visible within a 4-meter radius or distance.                                                                   |
 
+#### 🤖 Actions 🤖
+Our discrete action space is as follows:
+
+- **move_ahead** (`m`): Move the agent’s base forward by 0.2 meters.
+- **move_back** (`b`): Move the agent’s base backward by 0.2 meters.
+- **rotate_left** (`l`): Rotate the agent’s base left by 30°.
+- **rotate_right** (`r`): Rotate the agent’s base right by 30°.
+- **rotate_left_small** (`ls`): Rotate the agent’s base left by 6°.
+- **rotate_right_small** (`rs`): Rotate the agent’s base right by 6°.
+- **move_arm_up** (`yp`): Move the arm up by 0.1 meters.
+- **move_arm_down** (`ym`): Move the arm down by 0.1 meters.
+- **move_arm_out** (`zp`): Extend the arm outward by 0.1 meters.
+- **move_arm_in** (`zm`): Retract the arm inward by 0.1 meters.
+- **move_arm_up_small** (`yps`): Move the arm up by 0.02 meters.
+- **move_arm_down_small** (`yms`): Move the arm down by 0.02 meters.
+- **move_arm_out_small** (`zps`): Extend the arm outward by 0.02 meters.
+- **move_arm_in_small** (`zms`): Retract the arm inward by 0.02 meters.
+- **wrist_open** (`wp`): Rotate the wrist counterclockwise by 10°.
+- **wrist_close** (`wm`): Rotate the wrist clockwise by 10°.
+- **end** (`end`): Signal the end of a task.
+- **sub_done** (`sub_done`): Mark a sub-task as complete.
+- **pickup** (`p`): Initiate a grasp action to pick up an object.
+- **dropoff** (`d`): Execute a release action to drop an object.
+
 
 #### 💪 Running training 💪
 
