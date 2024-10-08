@@ -51,7 +51,7 @@ wandb
 scikit-video
 nbformat
 pre-commit
-black==23.3.0
+black==24.10.0
 scikit-image
 torchmetrics
 av
